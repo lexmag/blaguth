@@ -18,5 +18,6 @@ before_script:
   - export PATH=$PWD/elixir/bin:$PATH
   - export MIX_ENV=test
   - mix local.hex --force
+  - mix deps.get
 
 script: mix test --trace
