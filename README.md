@@ -16,7 +16,25 @@ After you are done, run `mix deps.get` in your shell to fetch the dependencies.
 
 ## Usage
 
-[WIP] See [test file](./test/blaguth_test.exs#L5-L19) for now.
+Add Blaguth on top of a Plug Stack as follows:
+
+```elixir
+defmodule CavePlug do
+  import Plug.Conn
+  use Plug.Router
+
+  plug Blaguth, realm: "Secret",
+    credentials: {"Ali Baba", "Open Sesame"}
+
+  plug :match
+  plug :dispatch
+
+  get "/" do
+    assign(conn, :logged_in, true)
+    |> send_resp(200, "Hello Ali Baba")
+  end
+end
+```
 
 ## License
 
