@@ -30,8 +30,7 @@ defmodule CavePlug do
   plug :dispatch
 
   get "/" do
-    assign(conn, :logged_in, true)
-    |> send_resp(200, "Hello Ali Baba")
+    send_resp(conn, 200, "Hello Ali Baba")
   end
 end
 ```

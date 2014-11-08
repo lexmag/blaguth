@@ -4,15 +4,14 @@ defmodule BlaguthTest do
 
   defmodule CavePlug do
     import Plug.Conn
-    use Plug.Router
+    use Plug.Builder
 
     plug Blaguth, realm: "Secret",
       credentials: {"Ali Baba", "Open Sesame"}
 
-    plug :match
-    plug :dispatch
+    plug :index
 
-    get "/" do
+    defp index(conn, _opts) do
       assign(conn, :logged_in, true)
       |> send_resp(200, "Hello Ali Baba")
     end
