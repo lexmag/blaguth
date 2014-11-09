@@ -8,7 +8,7 @@ Add Blaguth as a dependency to your `mix.exs` file:
 
 ```elixir
 defp deps do
-  [{:blaguth, "~> 1.0.0"}]
+  [{:blaguth, "~> 1.1.0"}]
 end
 ```
 
