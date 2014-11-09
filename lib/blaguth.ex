@@ -1,14 +1,15 @@
 defmodule Blaguth do
   alias Plug.Conn
 
+  def init([]), do: nil
   def init(opts) do
     {realm, opts} = Keyword.pop(opts, :realm, "Restricted Area")
 
     init(realm, opts)
   end
 
-  defp init(realm, credentials: {username, password}) when is_binary(realm) do
-    %{realm: realm, creds: username <> ":" <> password}
+  defp init(realm, credentials: {user, pass}) when is_binary(realm) do
+    {realm, user <> ":" <> pass}
   end
 
   def call(conn, config) do
@@ -30,15 +31,25 @@ defmodule Blaguth do
 
   defp decode_creds({conn, _}), do: {conn, nil}
 
-  defp assert_creds({conn, val}, %{creds: val}),
+  defp assert_creds({conn, val}, nil) do
+    destructure([user, pass], split_creds(val))
+
+    Conn.assign(conn, :credentials, {user, pass})
+  end
+
+  defp assert_creds({conn, val}, {_, val}),
     do: conn
 
-  defp assert_creds({conn, _}, %{realm: realm}),
+  defp assert_creds({conn, _}, {realm, _}),
     do: halt_with_login(conn, realm)
 
-  defp halt_with_login(conn, realm) do
+  def halt_with_login(conn, realm) do
     Conn.put_resp_header(conn, "Www-Authenticate", "Basic realm=\"" <> realm <> "\"")
     |> Conn.send_resp(401, "HTTP Basic: Access denied.\n")
     |> Conn.halt
   end
+
+  defp split_creds(nil), do: []
+  defp split_creds(val),
+    do: :binary.split(val, ":")
 end

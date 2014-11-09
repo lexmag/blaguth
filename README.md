@@ -21,16 +21,45 @@ Add Blaguth on top of a Plug Stack as follows:
 ```elixir
 defmodule CavePlug do
   import Plug.Conn
-  use Plug.Router
+  use Plug.Builder
 
   plug Blaguth, realm: "Secret",
     credentials: {"Ali Baba", "Open Sesame"}
+
+  plug :index
+
+  def index(conn, _opts) do
+    send_resp(conn, 200, "Hello Ali Baba")
+  end
+end
+```
+
+If you need more precise control over authentication process:
+
+```elixir
+defmodule AdvancedPlug do
+  import Plug.Conn
+  use Plug.Router
+
+  plug Blaguth
 
   plug :match
   plug :dispatch
 
   get "/" do
-    send_resp(conn, 200, "Hello Ali Baba")
+    send_resp(conn, 200, "Everyone can see me!")
+  end
+
+  get "/secret" do
+    if authenticated?(conn.assigns) do
+      send_resp(conn, 200, "I'm only accessible if you know the password")
+    else
+      Blaguth.halt_with_login(conn, "Secret")
+    end
+  end
+
+  defp authenticated?(%{credentials: {user, pass}}) do
+    User.authenticate(user, pass)
   end
 end
 ```
