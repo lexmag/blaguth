@@ -3,7 +3,7 @@ defmodule Blaguth.Mixfile do
 
   def project do
     [app: :blaguth,
-     version: "1.1.0",
+     version: "1.1.1",
      elixir: "~> 1.0",
      deps: deps,
      description: description,
