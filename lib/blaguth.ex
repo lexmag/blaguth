@@ -44,7 +44,7 @@ defmodule Blaguth do
     do: halt_with_login(conn, realm)
 
   def halt_with_login(conn, realm) do
-    Conn.put_resp_header(conn, "Www-Authenticate", "Basic realm=\"" <> realm <> "\"")
+    Conn.put_resp_header(conn, "www-authenticate", "Basic realm=\"" <> realm <> "\"")
     |> Conn.send_resp(401, "HTTP Basic: Access denied.\n")
     |> Conn.halt
   end

@@ -46,7 +46,7 @@ defmodule BlaguthTest do
 
   defp assert_unauthorized(conn, realm) do
     assert conn.status == 401
-    assert get_resp_header(conn, "Www-Authenticate") == ["Basic realm=\"" <> realm <> "\""]
+    assert get_resp_header(conn, "www-authenticate") == ["Basic realm=\"" <> realm <> "\""]
     refute conn.assigns[:logged_in]
   end
 
