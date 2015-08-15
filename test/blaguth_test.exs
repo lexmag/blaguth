@@ -23,10 +23,10 @@ defmodule BlaguthTest do
 
     plug Blaguth
 
-    plug :authenticate
+    plug :authorize
     plug :index
 
-    defp authenticate(conn, _opts) do
+    defp authorize(conn, _opts) do
       case conn.assigns[:credentials] do
         {"James", "837737"} -> conn
         _ -> Blaguth.halt_with_login(conn, "Top secret")
@@ -39,9 +39,12 @@ defmodule BlaguthTest do
     end
   end
 
-  defp call(plug, headers) do
-    conn(:get, "/", [], headers: headers)
-    |> plug.call([])
+  defp authorize(plug, header) do
+    conn = conn(:get, "/")
+    if header do
+      conn = put_req_header(conn, "authorization", header)
+    end
+    plug.call(conn, [])
   end
 
   defp assert_unauthorized(conn, realm) do
@@ -56,50 +59,49 @@ defmodule BlaguthTest do
     assert conn.assigns[:logged_in]
   end
 
-  defp auth_header(creds) do
-    {"authorization", "Basic " <> Base.encode64(creds)}
+  defp basic_auth(creds) do
+    "Basic " <> Base.encode64(creds)
   end
 
   test "request without credentials" do
-    conn = call(CavePlug, [])
+    conn = authorize(CavePlug, nil)
 
     assert_unauthorized conn, "Secret"
   end
 
   test "request with invalid credentials" do
-    conn = call(CavePlug, [auth_header("Thief:Open Sesame")])
+    conn = authorize(CavePlug, basic_auth("Thief:Open Sesame"))
 
     assert_unauthorized conn, "Secret"
   end
 
   test "request with valid credentials" do
-    conn = call(CavePlug, [auth_header("Ali Baba:Open Sesame")])
+    conn = authorize(CavePlug, basic_auth("Ali Baba:Open Sesame"))
 
     assert_authorized conn, "Hello Ali Baba"
   end
 
   test "request with malformed credentials" do
-    conn = call(CavePlug, [{"authorization", "Basic Zm9)"}])
+    conn = authorize(CavePlug, "Basic Zm9)")
 
     assert_unauthorized conn, "Secret"
   end
 
   test "request with wrong scheme" do
-    conn = call(CavePlug, [
-      {"authorization", "Bearer " <> Base.encode64("Ali Baba:Open Sesame")}
-    ])
+    creds = Base.encode64("Ali Baba:Open Sesame")
+    conn = authorize(CavePlug, "Bearer " <> creds)
 
     assert_unauthorized conn, "Secret"
   end
 
   test "manual handling for invalid credentials" do
-    conn = call(PassthruPlug, [auth_header("James")])
+    conn = authorize(PassthruPlug, basic_auth("James"))
 
     assert_unauthorized conn, "Top secret"
   end
 
   test "manual handling for valid credentials" do
-    conn = call(PassthruPlug, [auth_header("James:837737")])
+    conn = authorize(PassthruPlug, basic_auth("James:837737"))
 
     assert_authorized conn, "Wellcome James"
   end
