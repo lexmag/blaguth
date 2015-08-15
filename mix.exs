@@ -16,7 +16,7 @@ defmodule Blaguth.Mixfile do
 
   defp deps do
     [{:cowboy, "~> 1.0", optional: true},
-     {:plug, "~> 0.13"}]
+     {:plug, ">= 0.13.0"}]
   end
 
   defp description,
