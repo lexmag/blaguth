@@ -1,28 +1,29 @@
 defmodule Blaguth.Mixfile do
   use Mix.Project
 
-  def project do
+  def project() do
     [app: :blaguth,
      version: "1.2.1",
      elixir: "~> 1.0",
-     deps: deps,
-     description: description,
-     package: package]
+     deps: deps(),
+     description: description(),
+     package: package()]
   end
 
-  def application do
+  def application() do
     [applications: []]
   end
 
-  defp deps do
+  defp deps() do
     [{:cowboy, "~> 1.0", optional: true},
      {:plug, ">= 0.13.0"}]
   end
 
-  defp description,
-    do: "Basic Access Authentication in Plug applications."
+  defp description() do
+    "Basic Access Authentication in Plug applications."
+  end
 
-  defp package do
+  defp package() do
     [contributors: ["Aleksei Magusev"],
      licenses: ["ISC"],
      links: %{"GitHub" => "https://github.com/lexmag/blaguth"}]

@@ -42,9 +42,11 @@ defmodule BlaguthTest do
   defp authorize(plug, header) do
     conn = conn(:get, "/")
     if header do
-      conn = put_req_header(conn, "authorization", header)
+      put_req_header(conn, "authorization", header)
+    else
+      conn
     end
-    plug.call(conn, [])
+    |> plug.call([])
   end
 
   defp assert_unauthorized(conn, realm) do
