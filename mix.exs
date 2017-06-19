@@ -29,7 +29,7 @@ defmodule Blaguth.Mixfile do
 
   defp package() do
     [
-      contributors: ["Aleksei Magusev"],
+      maintainers: ["Aleksei Magusev"],
       licenses: ["ISC"],
       links: %{"GitHub" => "https://github.com/lexmag/blaguth"},
     ]
