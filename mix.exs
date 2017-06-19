@@ -2,12 +2,14 @@ defmodule Blaguth.Mixfile do
   use Mix.Project
 
   def project() do
-    [app: :blaguth,
-     version: "1.2.1",
-     elixir: "~> 1.0",
-     deps: deps(),
-     description: description(),
-     package: package()]
+    [
+      app: :blaguth,
+      version: "1.2.2",
+      elixir: "~> 1.0",
+      deps: deps(),
+      description: description(),
+      package: package(),
+    ]
   end
 
   def application() do
@@ -15,8 +17,10 @@ defmodule Blaguth.Mixfile do
   end
 
   defp deps() do
-    [{:cowboy, "~> 1.0", optional: true},
-     {:plug, ">= 0.13.0"}]
+    [
+      {:cowboy, "~> 1.0", optional: true},
+      {:plug, ">= 0.13.0"},
+    ]
   end
 
   defp description() do
@@ -24,8 +28,10 @@ defmodule Blaguth.Mixfile do
   end
 
   defp package() do
-    [contributors: ["Aleksei Magusev"],
-     licenses: ["ISC"],
-     links: %{"GitHub" => "https://github.com/lexmag/blaguth"}]
+    [
+      contributors: ["Aleksei Magusev"],
+      licenses: ["ISC"],
+      links: %{"GitHub" => "https://github.com/lexmag/blaguth"},
+    ]
   end
 end
