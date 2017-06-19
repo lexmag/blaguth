@@ -1,4 +1,8 @@
-# Blaguth [![Build Status](https://travis-ci.org/lexmag/blaguth.svg)](https://travis-ci.org/lexmag/blaguth)
+# Blaguth
+
+[![Build Status](https://travis-ci.org/lexmag/blaguth.svg)](https://travis-ci.org/lexmag/blaguth)
+[![Hex Version](https://img.shields.io/hexpm/v/blaguth.svg "Hex Version")](https://hex.pm/packages/blaguth)
+
 
 [Basic Access Authentication](http://tools.ietf.org/html/rfc2617) in Plug applications.
 
