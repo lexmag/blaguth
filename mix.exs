@@ -18,8 +18,8 @@ defmodule Blaguth.Mixfile do
 
   defp deps() do
     [
-      {:cowboy, "~> 1.0", optional: true},
-      {:plug, ">= 0.13.0"},
+      {:cowboy, "~> 1.0.1 or ~> 1.1 or ~> 2.1", optional: true},
+      {:plug, ">= 1.0.0"},
     ]
   end
 
